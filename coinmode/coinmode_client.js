@@ -2362,6 +2362,7 @@ function CoinModeClient( params, on_initalised )
 											panel_error_show("Your account does not have enough funds to join this round." );
 										}
 										that.show_panel_rounds();
+										var details_topup = {};
 										
 										return on_complete( err, details_topup );
 									}
@@ -2876,6 +2877,17 @@ console.log( error );
 				$('#coinmode_requiredamount').click( function()
 					{
 						change_default_currency_type();
+						var confirmed = 0;
+						var pending = 0;
+						try
+						{
+							confirmed = balance['confirmed'];
+							pending = balance['pending'];
+						}
+						catch(e)
+						{
+							console.log("Error getting balance value");
+						}
 						__update_qr_deposit( bitcoin_address, amount_required_in_satoshi_total, balance['confirmed'], balance['pending'], display_payment_details );
 					}
 				);				
@@ -3199,6 +3211,8 @@ console.log( error );
 									{
 										panel_error_show("Your account does not have enough funds to create a new round." );
 									}
+									var details_topup = {};
+									
 									return on_error( err, details_topup );
 								}
 								

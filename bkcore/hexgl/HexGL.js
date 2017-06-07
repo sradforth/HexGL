@@ -101,7 +101,7 @@ bkcore.hexgl.HexGL.prototype.start = function()
 		if(self && self.active) requestAnimationFrame( raf );
 		self.update();
 	}
-
+alert("SR1");
 	//if(this.a[15] == "o")
 		raf();
 

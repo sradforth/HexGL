@@ -113,8 +113,86 @@ bkcore.hexgl.Gameplay.prototype.simu = function()
 	this.shipControls.active = false;
 }
 
+var cm_client;
+
 bkcore.hexgl.Gameplay.prototype.start = function(opts)
 {
+
+	var that = this;
+
+
+	var params =
+	{
+		//coinmode_api_server : "http://localhost:3000", // Useful for pointing to a different CoinMode API server.  If not set it will send all API calls to https://api.coinmode.com
+		// session_token : "st_PQnD54nPaG2g", // If we already have a session token they are trying to jump to, use this.  (I.e. the player has been assigned to an existing round and session already)
+		//uuid_or_email: "password0@radforth.com", // This is the login token if it already exists.  If it doesn't exist the user will be invited to log in.#
+		game_id: "84", // This is the game we are looking to play.  This is required for getting the play_token phase or creating new rounds
+		game_name: "HexGL", // This is the game we are looking to play.  This is required for getting the play_token phase or creating new rounds
+		call_session_start_from_client: true,	// If a single player game we can get this browser to invoke the session has started.  When doing multiplayer games it is best the server calls /session/start so it starts all players at the same time and can refund if there is an error.
+		skip_start_screen : true, // This jumps straight into the game rather than showing the 'Play!' screen
+		request_permissions : "permission_charge_to_play,permission_phone,permission_charge_iap",
+		allow_topup_page: true, // If the user requires more funds to play, show the topup page
+		show_locked_rounds: true, // 
+		newround_passphrase_allow_user_entered : false, // Default is false and a random one is created each time so can only be joined by sharing invites.
+		// newround_allow_empty_passphrase : true, // If a blank passphrase can be used (i.e. a public game), default false.
+		//play_token:"st_PQnD54nPaG2g" // Use a playtoken as the voucher to obtain the session token for playing a game.  If not set it will ask the user to create an account or authorise a new playtoken for this game.	
+		auto_create_new_round_if_none_found : true, // If there were no rounds found automatically jump to the create a new round?
+		testnet: true,
+	}
+	
+	// Parameters that may be part of the GET URL are session_token, round_id, passphrase
+alert("SR: In gameplaystart");
+debugger;
+	cm_client = new CoinModeClient( params, function on_start( err )
+		{
+			console.log("Init_game()");
+		}
+	);
+	// Show coinmode popup to get the session token to play the game.
+	cm_client.setup( function( err, array_details ) 
+		{						
+			console.log(array_details);
+			/*
+			{		
+				display_name:"bob",
+				round_id:17, 
+				session_token:"st_2iuDb2kAvzhC"
+			}
+			*/
+			if( err )
+			{
+				alert("User cancelled");
+				allow_start = true;
+				$('#intro').fadeIn();
+			}
+			else
+			{
+				//on_round_selected( array_details );
+				var player_name = "(new)"; // Could do an API call to Coinmode to obtain player info or when they've logged in.
+				player_name = cm_client.get_display_name("Not logged in");
+				if( array_details['round_id'] > 0 )
+				{
+					that.init_game(opts);
+				}
+				else
+				{
+					alert("Invalid round found. Aborting");
+				}
+
+			}
+		}
+	);
+
+
+}
+	
+	
+	
+	
+	
+bkcore.hexgl.Gameplay.prototype.init_game = function(opts)
+{
+
 	this.finishTime = null;
 	this.score = null;
 	this.lap = 1;
@@ -164,15 +242,30 @@ bkcore.hexgl.Gameplay.prototype.end = function(result)
 
 	this.shipControls.active = false;
 
+	
 	if(result == this.results.FINISH)
 	{
 		if(this.hud != null) this.hud.display("Finish");
 		this.step = 100;
+		
+		alert("SR: YES, Finished.  Submitting Coinmode score of:"+this.finishTime );
+		cm_client.session_stop( {score:this.finishTime}, function(err)
+			{
+				alert("submitting");
+				// Completed
+				cm_client.show_summary( function(err)
+					{
+						alert("done");
+					}
+				);
+			}
+		);
 	}
 	else if(result == this.results.DESTROYED)
 	{
 		if(this.hud != null) this.hud.display("Destroyed");
 		this.step = 100;
+		alert("SR: DNF.  Submitting Coinmode score of:"+this.finishTime );
 	}
 }
 

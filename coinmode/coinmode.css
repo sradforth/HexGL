@@ -11,6 +11,10 @@
 {
 	color: #000000;
     font-family: "Gill Sans MT", "Arial", Gadget, sans-serif;
+	z-index: 10000;
+    position: absolute;
+    top: 50%;
+    left: 50%;
 }
 #coinmode_background
 {
