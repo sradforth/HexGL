@@ -1,0 +1,664 @@
+/* Version 3.12  20170201 */
+/*  Orange : FDB714 
+    Lt Orange: #ffecc0
+	Blue: #01A3FF was #35a3c3
+	Black: #101010
+	Border Grey: #888888
+	Faint Black: #b5b5b5
+*/
+
+#coinmode_root
+{
+	color: #000000;
+    font-family: "Gill Sans MT", "Arial", Gadget, sans-serif;
+}
+#coinmode_background
+{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(18, 43, 78, 0.57);
+	display:none;
+}
+
+.coinmode_color_title
+{
+    background-color: #FDB714;
+    color: #ffffff;
+}
+.coinmode_smallsubtletext
+{
+	color:#888888;
+	font-size:50%;
+}
+
+.coinmode_box
+{
+    width: 320px;
+    border-style: solid;
+    border-radius: 1em;
+    border-color: #171717;
+    background-color: #ffffff;
+    top: 25%;
+    box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.72);
+    border-width: 1px;
+    padding: 10px;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    top: 50%;
+    -webkit-transition: width 2s, height 4s; /* Safari */
+    transition: width 2s, height 4s;
+	color:#000000;
+}
+
+.coinmode_boxtitle_root
+{
+    width: 100%;
+    text-align: center;
+}
+
+#coinmode_boxtitle_text
+{
+    border-radius: 0.2em;
+    font-size: 150%;
+    text-align: center;
+    padding: 0px;
+    overflow: hidden;
+    word-wrap: normal;
+    height: 24px;
+    white-space: nowrap;
+	color:#ffffff;
+}
+
+.coinmode_subbox
+{    
+	padding: 8px;
+}
+
+.coinmode_inputbox
+{
+    border-color: #888888;
+    border-style: solid;
+    border-width: 1px;
+    font-size: 150%;
+    text-align: center;
+    width: 100%;
+}
+
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:    #888;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    #888;
+   opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    #888;
+   opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color:    #888;
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+   color:    #888;
+}
+
+
+.coinmode_field_description
+{
+	display: inline-block;
+/*	width: 100px; */
+}
+
+.coinmode_text_heading
+{
+	margin-top:16px;
+}
+
+
+.coinmode_button
+{
+    border-radius: 24px;
+    padding: 8px 24px 8px 24px;
+    margin: 4px;
+    font-size: 150%;
+    width: 200px;
+    text-align: center;
+    box-shadow: 1px 1px 3px #bfbfbf;
+    color: #101010;
+    white-space: nowrap;
+}
+.coinmode_button:hover 
+{
+    background-color: #40a3ff;
+    color: #ffffff;
+}
+
+
+
+.coinmode_button:active 
+{
+    background-color: #4388AF;
+}
+.coinmode_errortext
+{
+	color:#ff0000;
+	text-align: center;
+}
+
+
+#coinmode_buttons_area 
+{
+	line-height: 54px;
+    width: 100%;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+#coinmode_logged_in_as
+{
+    text-align: left;
+    border-radius: 4px;
+    color: #01A3FF;
+    font-size: 90%;
+	position:absolute;
+	top:8px;
+	left:8px;
+}
+
+#coinmode_log_out
+{
+	position: absolute;
+    right: 8px;
+    top: 8px;
+    text-align: right;
+    color: #01A3FF;
+    font-size: 100%;
+}
+.coinmode_image_game_icon
+{
+    height: 180px;
+    max-width: 180px;
+    border-radius: 8px;
+    margin-top: -8px;
+}
+.coinmode_with_image
+{
+    margin-top: 0px;	
+}
+
+.coinmode_refresh_text
+{
+	font-size:50%;
+	color:#888888;
+	text-align:center;
+}
+
+.coinmode_title
+{
+    border-style: solid;
+    text-align: center;
+    border-width: 1px;
+    background-color: #e4e4e4;
+    border-radius: 2px;
+}
+
+.coinmode_freetoplay
+{
+    text-align: center;
+    padding-top: 10px;
+}
+
+.coinmode_reward_value
+{
+    font-size: 150%;
+    text-align: center;
+    color: #46a241;
+    background-color: #e4e4e4;
+    border-radius: 0.3em;
+    padding: 4px;
+    margin: 8px;
+    box-shadow: 4px 4px 8px #968c8c;
+    border-style: solid;
+    border-color: #000000;
+    border-width: 1px;	
+}
+.coinmode_bitcoinaddress
+{
+    border-style: solid;
+    font-size: 75%;
+    text-align: center;
+    border-width: 1px;
+    background-color: #e4e4e4;
+    border-radius: 2px;
+}
+.coinmode_requiredamount
+{
+	text-align: center;
+    font-size: 250%;
+    margin-bottom: 16px;
+}
+
+.coinmode_round_row_remaining
+{
+	display:inline-block;
+	width:150px;
+}
+.coinmode_round_row_new
+{
+	display:inline-block;
+	color: #FDB714;
+	width:150px;
+}
+
+.coinmode_round_row_new
+{
+	display:inline-block;
+    color: #ffffff;
+    background-color: #FDB714;
+	width:280px;
+	text-align:center;
+	border-radius:4px;
+	padding:0px;
+    border-style: solid;
+    border-color: #444444;
+    border-width: 1px;	
+	box-shadow: 1px 2px 3px #bfbfbf;
+}
+.coinmode_round_row_new:hover
+{
+    background-color: #35a3c3;
+}
+
+.coinmode_round_row_age
+{
+	display:inline-block;
+	font-size:80%;
+	width:150px;
+}
+.coinmode_round_row_players_found
+{
+	color:#FDB714;
+}
+.coinmode_round_row_players_notfound
+{
+	color:#888888;
+}
+.coinmode_round_row_players
+{
+	font-size:80%;
+	display:inherit;
+	width:300px;
+}
+
+.coinmode_round_area
+{
+	height: 197px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.coinmode_round_row
+{
+	padding-top: 5px;
+    padding-bottom: 5px;
+    border-style: solid;
+    border-width: 1px;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-right-style: none;
+    border-left-style: none;
+    border-color: #e8e6e6;
+}
+.coinmode_round_row:hover 
+{
+    background-color: #35a3c3;
+}
+.coinmode_round_row:active 
+{
+    background-color: #4388AF;
+}
+.coinmode_highlighted 
+{
+    background-color: #bbd7ff;
+}
+
+.coinmode_summary_points
+{
+	float:right;
+}
+
+.coinmode_score_normal_player
+{
+    padding: 3px;
+    margin: 3px;
+}
+.coinmode_score_highlight_player
+{
+border-style: solid;
+    border-width: 2px;
+    border-radius: .3em;
+    padding: 4px;
+    margin: 0px;
+    border-color: #00ff53;
+    box-shadow: 0px 0px 8px;
+}
+
+#coinmode_spinner{
+	position: absolute;
+    top: 48%;
+    left: 48%;
+    z-index: 10;
+	display:none;
+}
+
+.sk-folding-cube {
+  margin: 20px auto;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  -webkit-transform: rotateZ(45deg);
+          transform: rotateZ(45deg);
+}
+
+.sk-folding-cube .sk-cube {
+  float: left;
+  width: 50%;
+  height: 50%;
+  position: relative;
+  -webkit-transform: scale(1.1);
+      -ms-transform: scale(1.1);
+          transform: scale(1.1); 
+}
+.sk-folding-cube .sk-cube:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #FDB714;
+  -webkit-animation: sk-foldCubeAngle 2.4s infinite linear both;
+          animation: sk-foldCubeAngle 2.4s infinite linear both;
+  -webkit-transform-origin: 100% 100%;
+      -ms-transform-origin: 100% 100%;
+          transform-origin: 100% 100%;
+}
+.sk-folding-cube .sk-cube2 {
+  -webkit-transform: scale(1.1) rotateZ(90deg);
+          transform: scale(1.1) rotateZ(90deg);
+}
+.sk-folding-cube .sk-cube3 {
+  -webkit-transform: scale(1.1) rotateZ(180deg);
+          transform: scale(1.1) rotateZ(180deg);
+}
+.sk-folding-cube .sk-cube4 {
+  -webkit-transform: scale(1.1) rotateZ(270deg);
+          transform: scale(1.1) rotateZ(270deg);
+}
+.sk-folding-cube .sk-cube2:before {
+  -webkit-animation-delay: 0.3s;
+          animation-delay: 0.3s;
+}
+.sk-folding-cube .sk-cube3:before {
+  -webkit-animation-delay: 0.6s;
+          animation-delay: 0.6s; 
+}
+.sk-folding-cube .sk-cube4:before {
+  -webkit-animation-delay: 0.9s;
+          animation-delay: 0.9s;
+}
+@-webkit-keyframes sk-foldCubeAngle {
+  0%, 10% {
+    -webkit-transform: perspective(140px) rotateX(-180deg);
+            transform: perspective(140px) rotateX(-180deg);
+    opacity: 0; 
+  } 25%, 75% {
+    -webkit-transform: perspective(140px) rotateX(0deg);
+            transform: perspective(140px) rotateX(0deg);
+    opacity: 1; 
+  } 90%, 100% {
+    -webkit-transform: perspective(140px) rotateY(180deg);
+            transform: perspective(140px) rotateY(180deg);
+    opacity: 0; 
+  } 
+}
+
+@keyframes sk-foldCubeAngle {
+  0%, 10% {
+    -webkit-transform: perspective(140px) rotateX(-180deg);
+            transform: perspective(140px) rotateX(-180deg);
+    opacity: 0; 
+  } 25%, 75% {
+    -webkit-transform: perspective(140px) rotateX(0deg);
+            transform: perspective(140px) rotateX(0deg);
+    opacity: 1; 
+  } 90%, 100% {
+    -webkit-transform: perspective(140px) rotateY(180deg);
+            transform: perspective(140px) rotateY(180deg);
+    opacity: 0; 
+  }
+}
+
+
+#coinmode_round_review
+{
+	margin: 0px;
+    width: 414px;
+    height: 128px;
+	resize: none;
+	outline: none;
+	overflow: auto;
+	text-align:left;
+}
+
+
+.coinmode_table_header_text
+{
+    font-weight: 800;
+	color:#FDB714;
+}
+
+
+.coinmode_share_buttons
+{
+	display: inline-flex;
+    margin: 10px;
+    list-style-type: none;
+}
+.coinmode_share_buttons img
+{
+    margin: 4px;
+}
+
+.coinmode_center
+{
+	text-align:center;
+}
+
+.coinmode_currency_blob
+{
+    font-size: 80%; /* Make sure this is an even number otherwise Chrome blurs the boxes containing the text */
+    border-style: solid;
+    border-radius: 0.2em;
+    border-width: 1px;
+    margin: 5px;
+    padding: 2px;
+    background-color: #eeeeee;
+    width: 200px;
+    display: inline-block;
+    text-align: center;
+}
+
+.coinmode_currency_local_all
+{
+	color:#5f5f5f;
+}
+
+.coinmode_currency_local_postfix
+{
+	font-size:75%;
+}
+
+
+
+#coinmode_share_link:hover
+{
+	background-color: #F7AF13;
+}
+
+#coinmode_share_link:active
+{
+	background-color: #806000;
+}
+
+#coinmode_share_link
+{
+    border-radius: 2em;
+    border-style: solid;
+    font-size: 80%;
+    text-align: center;
+    border-width: 1px;
+    width: 90%;
+    background-color: #FDB714;
+    height: 40px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #888888;
+    color: #101010;
+    padding: 2px;
+    margin-left: 5%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    box-shadow: 1px 1px 3px #bfbfbf;
+    overflow: hidden;
+}
+
+#coinmode_qrcode
+{
+	zoom: 0.5;
+    text-align: center;	
+}
+.coinmode_warningtext
+{
+	color:#ff0000;
+	font-size:150%;
+	text-align:center;
+}
+
+.coinmode_large_centered
+{
+	font-size:150%;
+	text-align:center;
+	border-radius: .2em;
+    border-style: solid;
+    border-width: 1px;
+    background-color: #f4f8ff;
+}
+
+#coinmode_copied_popup
+{
+	position: absolute;
+    background-color: #ffffff;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.55);
+    margin-top: -81px;
+    right: 64px;
+}
+
+.coinmode_send_funds
+{
+	margin-top: 10px;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+.rate {
+    border: 1px solid #cccccc;
+    height: 46px;
+	width: 154px;
+	border-radius: 0.4em;
+    padding: 0 10px;
+    margin-left: auto;
+    margin-right: auto;	
+}
+.rate:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+}
+.rate:not(:checked) > label {
+    float:right;
+    width:1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:30px;
+    color:#ccc;
+}
+.rate:not(:checked) > label:before {
+    content: '★ ';
+}
+.rate > input:checked ~ label {
+    color: #ffc700;    
+}
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+    color: #deb217;  
+}
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+    color: #c59b08;
+}
+
+.rate_value_for_money {
+    border: 1px solid #cccccc;
+    height: 46px;
+	width: 154px;
+	border-radius: 0.4em;
+    padding: 0 10px;
+    margin-left: auto;
+    margin-right: auto;	
+}
+.rate_value_for_money:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+}
+.rate_value_for_money:not(:checked) > label {
+    float:right;
+    width:1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:30px;
+    color:#ccc;
+}
+.rate_value_for_money:not(:checked) > label:before {
+    content: '★ ';
+}
+.rate_value_for_money > input:checked ~ label {
+    color: #ffc700;    
+}
+.rate_value_for_money:not(:checked) > label:hover,
+.rate_value_for_money:not(:checked) > label:hover ~ label {
+    color: #deb217;  
+}
+.rate_value_for_money > input:checked + label:hover,
+.rate_value_for_money > input:checked + label:hover ~ label,
+.rate_value_for_money > input:checked ~ label:hover,
+.rate_value_for_money > input:checked ~ label:hover ~ label,
+.rate_value_for_money > label:hover ~ input:checked ~ label {
+    color: #c59b08;
+}
+
