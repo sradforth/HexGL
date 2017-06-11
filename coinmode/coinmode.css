@@ -82,6 +82,12 @@
 	padding: 8px;
 }
 
+.coinmode_results
+{
+    max-height: 184px;
+    overflow-y: scroll;	
+}
+
 .coinmode_inputbox
 {
     border-color: #888888;

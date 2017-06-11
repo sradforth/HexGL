@@ -48,6 +48,7 @@ bkcore.hexgl.Gameplay = function(opts)
 	this.lapTimeElapsed = 0;
 	this.maxLaps = 3;
 	this.score = null;
+	this.dnf = false;
 	this.finishTime = null;
 	this.onFinish = opts.onFinish == undefined ? function(){console.log("FINISH");} : opts.onFinish;
 
@@ -120,11 +121,12 @@ bkcore.hexgl.Gameplay.prototype.start = function(opts)
 
 	var that = this;
 
+	this.dnf = false;
 
 	var params =
 	{
 		//coinmode_api_server : "http://localhost:3000", // Useful for pointing to a different CoinMode API server.  If not set it will send all API calls to https://api.coinmode.com
-		// session_token : "st_PQnD54nPaG2g", // If we already have a session token they are trying to jump to, use this.  (I.e. the player has been assigned to an existing round and session already)
+		//session_token : "st_PQnD54nPaG2g", // If we already have a session token they are trying to jump to, use this.  (I.e. the player has been assigned to an existing round and session already)
 		//uuid_or_email: "password0@radforth.com", // This is the login token if it already exists.  If it doesn't exist the user will be invited to log in.#
 		game_id: "84", // This is the game we are looking to play.  This is required for getting the play_token phase or creating new rounds
 		game_name: "HexGL", // This is the game we are looking to play.  This is required for getting the play_token phase or creating new rounds
@@ -136,12 +138,14 @@ bkcore.hexgl.Gameplay.prototype.start = function(opts)
 		newround_passphrase_allow_user_entered : false, // Default is false and a random one is created each time so can only be joined by sharing invites.
 		// newround_allow_empty_passphrase : true, // If a blank passphrase can be used (i.e. a public game), default false.
 		//play_token:"st_PQnD54nPaG2g" // Use a playtoken as the voucher to obtain the session token for playing a game.  If not set it will ask the user to create an account or authorise a new playtoken for this game.	
-		auto_create_new_round_if_none_found : true, // If there were no rounds found automatically jump to the create a new round?
+		auto_create_new_round_if_none_found : false, // If there were no rounds found automatically jump to the create a new round?
+		allow_create_round : false, // On the round searching screen, if this is set to false the 'create round' button is hidden
+		show_winnings : false, // If false this shows the score being submitted, if true it shows the paid out amounts (This is only possible if the round has finished, i.e. a server game where the entire round has ended as this game ended)
 		testnet: true,
 	}
 	
 	// Parameters that may be part of the GET URL are session_token, round_id, passphrase
-alert("SR: In gameplaystart");
+//alert("SR: In gameplaystart");
 debugger;
 	cm_client = new CoinModeClient( params, function on_start( err )
 		{
@@ -172,7 +176,18 @@ debugger;
 				player_name = cm_client.get_display_name("Not logged in");
 				if( array_details['round_id'] > 0 )
 				{
-					that.init_game(opts);
+					// Call this when the game is playing the selected round/session
+					cm_client.session_start( function( err2 ) 
+						{
+							if( err2 )
+							{
+								console.log("Error");
+								console.log(err2);
+								alert("Unable to join round.  Your time will not be couunted.  Please reload the game to try again:"+err2);
+							}
+							that.init_game(opts);
+						}
+					);
 				}
 				else
 				{
@@ -242,31 +257,42 @@ bkcore.hexgl.Gameplay.prototype.end = function(result)
 
 	this.shipControls.active = false;
 
+	var longest_time = 10*60*1000; // 5 mins is max time.
+	var score = longest_time - this.finishTime;
+	if( score < 0 )
+	{
+		score = 0;
+	}
 	
 	if(result == this.results.FINISH)
 	{
 		if(this.hud != null) this.hud.display("Finish");
 		this.step = 100;
-		
-		alert("SR: YES, Finished.  Submitting Coinmode score of:"+this.finishTime );
-		cm_client.session_stop( {score:this.finishTime}, function(err)
-			{
-				alert("submitting");
-				// Completed
-				cm_client.show_summary( function(err)
-					{
-						alert("done");
-					}
-				);
-			}
-		);
 	}
 	else if(result == this.results.DESTROYED)
 	{
 		if(this.hud != null) this.hud.display("Destroyed");
 		this.step = 100;
-		alert("SR: DNF.  Submitting Coinmode score of:"+this.finishTime );
+		this.dnf = true;
+		this.score = 1;
+//		alert("SR: DNF.  Submitting Coinmode score of:"+this.finishTime );
 	}
+	alert("SR: YES, Finished.  Submitting Coinmode score of:"+score );
+	cm_client.session_stop( {"score":score, dnf:this.dnf}, function(err)
+		{
+			if( err )
+			{
+				console.log( err );
+				alert("Error submitting result:"+err);
+			}
+			// Completed
+			cm_client.show_summary( function(err)
+				{
+					alert("done");
+				}
+			);
+		}
+	);
 }
 
 bkcore.hexgl.Gameplay.prototype.update = function()

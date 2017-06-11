@@ -8,6 +8,7 @@
 // Version 3.16  20170217 - Improved sharing so links are one url with previews
 // Version 3.17  20170218 - Renamed session start/stop functions
 // Version 3.18  20170218 - Flag if new rounds can have empty passwords.  Support for showing only public games, not locked ones.
+// Version 3.19  20170611 - Added allow_create_round, Added winning pot text on end result and time remaining on round games. Fixed api method error double calling when no status=ok
 
 // Last updated: 20170303
 
@@ -556,10 +557,15 @@ function CoinModeClient( params, on_initalised )
 		{
 			return on_complete( "missing successful call to setup() that obtains the session token" );
 		}
+		
+		// Each result needs to be submitted with the session token
+		var submit_data = {};
+		submit_data[ this.m_session_token ] = results_from_client;
+		
 		// Stop the session and save the results
 		this.api_call( "/games/round/session/stop",
 			{
-				results_from_client	: results_from_client,
+				results	: submit_data,
 			},
 			function( error, session_info )
 			{				
@@ -636,16 +642,17 @@ function CoinModeClient( params, on_initalised )
 						console.log("Got results:");
 						console.log(result_info);
 						
+						var round_info = result_info['round_info'];
 						var array_sessions = result_info['sessions'];
 						
-						var show_winnings = true;
 												
 						var result_type = "Score";
-						if( show_winnings )
+						if( that.show_winnings )
 						{
 							result_type = "Winnings";
 						}
-						var html_subbox =  "<div class='coinmode_table_header_text'>Name<span class='coinmode_table_header_text coinmode_summary_points'>"+result_type+"</span></div>";
+						var html_subbox = "<div class='coinmode_table_header_text'>Name<span class='coinmode_table_header_text coinmode_summary_points'>"+result_type+"</span></div>";
+						html_subbox +=  "<div class='coinmode_results'>";
 						for( i = 0; i < array_sessions.length; i++ )
 						{
 							var session = array_sessions[i];
@@ -674,20 +681,55 @@ function CoinModeClient( params, on_initalised )
 								classname = "coinmode_score_normal_player";								
 							}
 							//SR: TODO, MUST OBTAIN m_pot_total from get_result!
-							if( show_winnings )
+							if( that.show_winnings )
 							{
 								var paid_out = session['paid_out'];
 								
-								paid_out = 0;
+								//paid_out = 0;
 								if( score > 0 )
 								{
-									paid_out = 7650; // SR: TODO!!! THIS ISNT REPORTING THE PAID OUT VALUE CORRECTLY YET SO HARDCODED
+								//	paid_out = 7650; // SR: TODO!!! THIS ISNT REPORTING THE PAID OUT VALUE CORRECTLY YET SO HARDCODED
 								}
-								score = that.currency_format_with_btc_and_local( paid_out, m_currency_units);
+								score = that.currency_format_with_btc_and_local( paid_out );
 							}
 							
 							
 							html_subbox += "<div class='"+classname+"'>"+player_name+"<span class='coinmode_summary_points'>"+score+"</span></div>"
+						}
+						html_subbox += "</div>";
+
+						if( !that.show_winnings )
+						{
+							// If round type is finish on time "complete_on_epoch_to_finish"=1
+							if( round_info['round_type_id'] == 1 )
+							{								
+								var epoch_to_finish = round_info['epoch_to_finish'];
+								
+								var date_to_finish = new Date( epoch_to_finish * 1000 ) ;
+								var d = date_to_finish;
+								var string_date_finish = 									
+									("00" + (d.getMonth() + 1)).slice(-2) + "/" + 
+										("00" + d.getDate()).slice(-2) + "/" + 
+										d.getFullYear() + " " + 
+										("00" + d.getHours()).slice(-2) + ":" + 
+										("00" + d.getMinutes()).slice(-2);
+										/* + ":" + 
+										("00" + d.getSeconds()).slice(-2)	*/								
+								
+								
+								html_subbox = "<div class='coinmode_show_score_area'>Round Closes<span class='coinmode_summary_points'>"+string_date_finish+"</span></div>" + html_subbox;
+							}
+							
+							// Show remaining sessions for the round
+							if( round_info['sessions_remaining'] > 0 )
+							{
+								html_subbox = "<div class='coinmode_show_score_area'>Sessions Remaining<span class='coinmode_summary_points'>"+round_info['sessions_remaining']+"</span></div>" + html_subbox;
+							}
+							
+							// Display the winning pot prize
+							var winning_pot_html = that.currency_format_with_btc_and_local( round_info['winning_pot'] );
+							html_subbox = "<div class='coinmode_show_score_area'>Winning Pot<span class='coinmode_summary_points'>"+winning_pot_html+"</span></div>" + html_subbox;
+							
 						}
 						
 						$('#coinmode_subbox').html( html_subbox );
@@ -985,7 +1027,10 @@ function CoinModeClient( params, on_initalised )
 					{
 						return on_complete( null, data );
 					}
-					on_complete( "status error", data );					
+					if( data['status'] == "error" )
+					{
+						return on_complete( "status error", data );					
+					}
 				}
 				on_complete( null, data );					
 			}
@@ -2143,14 +2188,14 @@ function CoinModeClient( params, on_initalised )
 					if( rounds.length > 0 )
 					{
 						// Add new round option
-						// if( params['allow_create_round'] )
+						if( params['allow_create_round'] != false )
 						{
-						round_html += "\
-							<div id='"+row_tag+"_new"+"' class='coinmode_round_row_new'>\
-								<span class='coinmode_round_row_remaining'>New Round<span></span></span>\
-								<span class='coinmode_round_row_age'>Create a new round here</span>\
-								<span class='coinmode_round_row_players'></span>\
-							</div>";						
+							round_html += "\
+								<div id='"+row_tag+"_new"+"' class='coinmode_round_row_new'>\
+									<span class='coinmode_round_row_remaining'>New Round<span></span></span>\
+									<span class='coinmode_round_row_age'>Create a new round here</span>\
+									<span class='coinmode_round_row_players'></span>\
+								</div>";						
 						}
 						
 						for( var i=0; i < rounds.length; i++ )
@@ -2398,7 +2443,7 @@ function CoinModeClient( params, on_initalised )
 	this._request_session = function( round_id, passphrase, on_complete )
 	{		
 		spinner_show();
-		that.api_call( "/games/round/request_session", 
+		that.api_call( "/games/round/session/request", 
 			{
 				login_token:that.m_login_token,
 				play_token:that.m_play_token,
