@@ -122,7 +122,13 @@ bkcore.Audio.volume = function(id, volume){
 	var ctx = bkcore.Audio._ctx;
 
 	if(ctx){
-		bkcore.Audio.sounds[id].gainNode.gain.value = volume;
+		if( bkcore.Audio.sounds[id] != null )
+		{			
+			if( bkcore.Audio.sounds[id].gainNode != null )
+			{
+				bkcore.Audio.sounds[id].gainNode.gain.value = volume;
+			}
+		}
 	}
 	else {
 		bkcore.Audio.sounds[id].volume = volume;

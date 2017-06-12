@@ -308,6 +308,7 @@ bkcore.hexgl.Gameplay.prototype.end = function(result)
 	this.shipControls.active = false;
 
 	var local_score = convert_seconds_to_score( this.finishTime );
+	debugger;
 	if( local_score < 0 )
 	{
 		local_score = 0;
@@ -323,8 +324,8 @@ bkcore.hexgl.Gameplay.prototype.end = function(result)
 		if(this.hud != null) this.hud.display("Destroyed");
 		this.step = 100;
 		this.dnf = true;
-		local_score = 5;
-//		alert("SR: DNF.  Submitting Coinmode score of:"+this.finishTime );
+		// local_score = 5;
+		
 	}
 	//alert("SR: YES, Finished.  Submitting Coinmode score of:"+score );
 	cm_client.session_stop( {"score":local_score, dnf:this.dnf}, function(err)
