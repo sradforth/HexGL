@@ -24,12 +24,20 @@ function convert_seconds_to_score( milliseconds )
 
 function convert_score_to_seconds( score )
 {
+	if( score == 5 )
+	{
+		return -1;
+	}
 	var seconds = (g_longest_time_milliseconds - score ) / 1000;
 	return seconds;
 }
 
 function convert_seconds_to_html( seconds )
 {
+	if( seconds == -1 )
+	{
+		return "DNF";
+	}
 	var milliseconds = seconds - Math.floor(seconds);	
 	var milliseconds_text = 1000+Math.round(milliseconds * 1000); // To get 1xxx
 	
@@ -324,7 +332,7 @@ bkcore.hexgl.Gameplay.prototype.end = function(result)
 		if(this.hud != null) this.hud.display("Destroyed");
 		this.step = 100;
 		this.dnf = true;
-		// local_score = 5;
+		local_score = 5;
 		
 	}
 	//alert("SR: YES, Finished.  Submitting Coinmode score of:"+score );
