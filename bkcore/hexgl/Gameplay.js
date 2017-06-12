@@ -8,6 +8,44 @@
 var bkcore = bkcore || {};
 bkcore.hexgl = bkcore.hexgl || {};
 
+
+// Coinmode helper functions to display the score
+var g_longest_time_milliseconds = 10*60*1000 * 1000; // 10 mins is max time.
+
+function convert_seconds_to_score( seconds )
+{
+	var local_score = Math.floor(g_longest_time_milliseconds - (seconds * 1000));
+	if( local_score < 0 )
+	{
+		local_score = 0;
+	}	
+	return local_score;
+}
+
+function convert_score_to_seconds( score )
+{
+	var seconds = (g_longest_time_milliseconds - score ) / 1000
+	return seconds;
+}
+
+function convert_seconds_to_html( seconds )
+{
+	var milliseconds = seconds - Math.floor(seconds);	
+	var milliseconds_text = Math.round(milliseconds * 1000);
+	
+	milliseconds_text = (milliseconds_text + "000").substring(0,3);
+	var seconds_only = Math.floor(seconds) % 60;
+	var seconds_only_text = "0" + seconds_only;
+	var seconds_two_digits_text = seconds_only_text.substring( 0, 2 );
+	var mins = Math.floor( seconds / 60);
+	var text = mins + ":" + seconds_two_digits_text + "."+milliseconds_text;
+	return text;
+}
+
+
+
+
+
 bkcore.hexgl.Gameplay = function(opts)
 {
 	var self = this;
@@ -142,6 +180,13 @@ bkcore.hexgl.Gameplay.prototype.start = function(opts)
 		allow_create_round : false, // On the round searching screen, if this is set to false the 'create round' button is hidden
 		show_winnings : false, // If false this shows the score being submitted, if true it shows the paid out amounts (This is only possible if the round has finished, i.e. a server game where the entire round has ended as this game ended)
 		testnet: true,
+		on_convert_score_to_html: function(score)
+		{
+			var seconds = convert_score_to_seconds( score );
+			var text = convert_seconds_to_html( seconds );
+			return text;
+		}
+		
 	}
 	
 	// Parameters that may be part of the GET URL are session_token, round_id, passphrase
@@ -248,6 +293,11 @@ bkcore.hexgl.Gameplay.prototype.init_game = function(opts)
 	}
 }
 
+
+
+
+
+
 bkcore.hexgl.Gameplay.prototype.end = function(result)
 {
 	this.score = this.timer.getElapsedTime();
@@ -257,8 +307,7 @@ bkcore.hexgl.Gameplay.prototype.end = function(result)
 
 	this.shipControls.active = false;
 
-	var longest_time = 10*60*1000; // 5 mins is max time.
-	var local_score = longest_time - this.finishTime;
+	var local_score = g_longest_time - this.finishTime;
 	if( local_score < 0 )
 	{
 		local_score = 0;

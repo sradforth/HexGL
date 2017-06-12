@@ -9,6 +9,7 @@
 // Version 3.17  20170218 - Renamed session start/stop functions
 // Version 3.18  20170218 - Flag if new rounds can have empty passwords.  Support for showing only public games, not locked ones.
 // Version 3.19  20170611 - Added allow_create_round, Added winning pot text on end result and time remaining on round games. Fixed api method error double calling when no status=ok
+// Version 3.20  20170612 - Allow a score to be converted to html to display in results with params['on_convert_score_to_html']
 
 // Last updated: 20170303
 
@@ -680,9 +681,16 @@ function CoinModeClient( params, on_initalised )
 							{
 								classname = "coinmode_score_normal_player";								
 							}
-							//SR: TODO, MUST OBTAIN m_pot_total from get_result!
-							if( that.show_winnings )
+							
+							// Do we need to convert a score to a text value?  E.g. 799  => means 1000 - 799 => "201 seconds time"
+							var score_html = score;
+							if( that.params['on_convert_score_to_html'] != null )
 							{
+								score_html = that.params['on_convert_score_to_html']( score );
+							}
+							else if( that.show_winnings )
+							{
+								//SR: TODO, MUST OBTAIN m_pot_total from get_result!
 								var paid_out = session['paid_out'];
 								
 								//paid_out = 0;
@@ -690,11 +698,11 @@ function CoinModeClient( params, on_initalised )
 								{
 								//	paid_out = 7650; // SR: TODO!!! THIS ISNT REPORTING THE PAID OUT VALUE CORRECTLY YET SO HARDCODED
 								}
-								score = that.currency_format_with_btc_and_local( paid_out );
+								score_html = that.currency_format_with_btc_and_local( paid_out );
 							}
 							
 							
-							html_subbox += "<div class='"+classname+"'>"+player_name+"<span class='coinmode_summary_points'>"+score+"</span></div>"
+							html_subbox += "<div class='"+classname+"'>"+player_name+"<span class='coinmode_summary_points'>"+score_html+"</span></div>"
 						}
 						html_subbox += "</div>";
 
