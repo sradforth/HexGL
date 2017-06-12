@@ -12,9 +12,9 @@ bkcore.hexgl = bkcore.hexgl || {};
 // Coinmode helper functions to display the score
 var g_longest_time_milliseconds = 10*60*1000 * 1000; // 10 mins is max time.
 
-function convert_seconds_to_score( seconds )
+function convert_seconds_to_score( milliseconds )
 {
-	var local_score = Math.floor(g_longest_time_milliseconds - (seconds * 1000));
+	var local_score = Math.floor(g_longest_time_milliseconds - milliseconds);
 	if( local_score < 0 )
 	{
 		local_score = 0;
@@ -24,19 +24,19 @@ function convert_seconds_to_score( seconds )
 
 function convert_score_to_seconds( score )
 {
-	var seconds = (g_longest_time_milliseconds - score ) / 1000
+	var seconds = (g_longest_time_milliseconds - score ) / 1000;
 	return seconds;
 }
 
 function convert_seconds_to_html( seconds )
 {
 	var milliseconds = seconds - Math.floor(seconds);	
-	var milliseconds_text = Math.round(milliseconds * 1000);
+	var milliseconds_text = 1000+Math.round(milliseconds * 1000); // To get 1xxx
 	
-	milliseconds_text = (milliseconds_text + "000").substring(0,3);
+	milliseconds_text = (milliseconds_text + "000").substring(1,4);
 	var seconds_only = Math.floor(seconds) % 60;
 	var seconds_only_text = "0" + seconds_only;
-	var seconds_two_digits_text = seconds_only_text.substring( 0, 2 );
+	var seconds_two_digits_text = ("00" + seconds_only_text).slice(-2);
 	var mins = Math.floor( seconds / 60);
 	var text = mins + ":" + seconds_two_digits_text + "."+milliseconds_text;
 	return text;
