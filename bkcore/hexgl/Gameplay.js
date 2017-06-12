@@ -307,7 +307,7 @@ bkcore.hexgl.Gameplay.prototype.end = function(result)
 
 	this.shipControls.active = false;
 
-	var local_score = g_longest_time - this.finishTime;
+	var local_score = convert_seconds_to_score( this.finishTime );
 	if( local_score < 0 )
 	{
 		local_score = 0;
