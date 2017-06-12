@@ -48,6 +48,7 @@ bkcore.Audio.addSound = function(src, id, loop, callback, usePanner){
 				callback();
 			}, function(e){
 				console.error('Audio decode failed!', e);
+				callback();
 			});
 		};
 
