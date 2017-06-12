@@ -632,7 +632,9 @@ bkcore.hexgl.ShipControls.prototype.collisionCheck = function(dt)
 
 		// Shield
 		var sr = (this.getRealSpeed() / this.maxSpeed);
-		this.shield -= sr * sr * 0.8 * this.shieldDamage;
+		
+		// SR: Stop damage because it's annoying
+		//this.shield -= sr * sr * 0.8 * this.shieldDamage;
 
 		// Repulsion
 		this.repulsionVLeft.set(1,0,0);

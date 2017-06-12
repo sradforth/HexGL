@@ -46,7 +46,7 @@ bkcore.hexgl.Gameplay = function(opts)
 	this.lap = 1;
 	this.lapTimes = [];
 	this.lapTimeElapsed = 0;
-	this.maxLaps = 3;
+	this.maxLaps = 2;
 	this.score = null;
 	this.dnf = false;
 	this.finishTime = null;
@@ -258,10 +258,10 @@ bkcore.hexgl.Gameplay.prototype.end = function(result)
 	this.shipControls.active = false;
 
 	var longest_time = 10*60*1000; // 5 mins is max time.
-	var score = longest_time - this.finishTime;
-	if( score < 0 )
+	var local_score = longest_time - this.finishTime;
+	if( local_score < 0 )
 	{
-		score = 0;
+		local_score = 0;
 	}
 	
 	if(result == this.results.FINISH)
@@ -274,11 +274,11 @@ bkcore.hexgl.Gameplay.prototype.end = function(result)
 		if(this.hud != null) this.hud.display("Destroyed");
 		this.step = 100;
 		this.dnf = true;
-		this.score = 1;
+		local_score = 5;
 //		alert("SR: DNF.  Submitting Coinmode score of:"+this.finishTime );
 	}
-	alert("SR: YES, Finished.  Submitting Coinmode score of:"+score );
-	cm_client.session_stop( {"score":score, dnf:this.dnf}, function(err)
+	//alert("SR: YES, Finished.  Submitting Coinmode score of:"+score );
+	cm_client.session_stop( {"score":local_score, dnf:this.dnf}, function(err)
 		{
 			if( err )
 			{
@@ -288,7 +288,8 @@ bkcore.hexgl.Gameplay.prototype.end = function(result)
 			// Completed
 			cm_client.show_summary( function(err)
 				{
-					alert("done");
+					//alert("SR:Success");
+					console.log("Success");
 				}
 			);
 		}
