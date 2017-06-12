@@ -176,6 +176,7 @@ bkcore.hexgl.Gameplay.prototype.start = function(opts)
 		//uuid_or_email: "password0@radforth.com", // This is the login token if it already exists.  If it doesn't exist the user will be invited to log in.#
 		game_id: "84", // This is the game we are looking to play.  This is required for getting the play_token phase or creating new rounds
 		game_name: "HexGL", // This is the game we are looking to play.  This is required for getting the play_token phase or creating new rounds
+		image_url : "http://gatherhelp.com/coinmode_admin/main/files/hexgl_uq7cug1s.jpg" // Optional icon image to show as game title. (256x256 image)
 		call_session_start_from_client: true,	// If a single player game we can get this browser to invoke the session has started.  When doing multiplayer games it is best the server calls /session/start so it starts all players at the same time and can refund if there is an error.
 		skip_start_screen : true, // This jumps straight into the game rather than showing the 'Play!' screen
 		request_permissions : "permission_charge_to_play,permission_phone,permission_charge_iap",
