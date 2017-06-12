@@ -77,15 +77,21 @@ bkcore.Audio.play = function(id){
 
 	if(ctx){
 		var sound = ctx.createBufferSource();
-		sound.connect(bkcore.Audio.sounds[id].gainNode);
+		if( bkcore.Audio.sounds[id] != null )
+		{			
+			if( bkcore.Audio.sounds[id].gainNode != null )
+			{
+				sound.connect(bkcore.Audio.sounds[id].gainNode);
 		
-		sound.buffer = bkcore.Audio.sounds[id].src;
-		sound.loop = bkcore.Audio.sounds[id].loop;
+				sound.buffer = bkcore.Audio.sounds[id].src;
+				sound.loop = bkcore.Audio.sounds[id].loop;
 
-		bkcore.Audio.sounds[id].gainNode.gain.value = 1;
-		bkcore.Audio.sounds[id].bufferNode = sound;
+				bkcore.Audio.sounds[id].gainNode.gain.value = 1;
+				bkcore.Audio.sounds[id].bufferNode = sound;
 
-		sound.start ? sound.start(0) : sound.noteOn(0);
+				sound.start ? sound.start(0) : sound.noteOn(0);
+			}
+		}
 	}
 	else {
 		if(bkcore.Audio.sounds[id].currentTime > 0){
